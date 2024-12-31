@@ -1,12 +1,15 @@
 package com.MarsRover.MarsRover.models.map;
 
 
+import com.MarsRover.MarsRover.models.obstacles.Obstacle;
 import com.MarsRover.MarsRover.models.rover.Coordinates;
 import com.MarsRover.MarsRover.models.rover.Directions;
 import com.MarsRover.MarsRover.models.rover.Rover;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class Map {
     private Grid grid;
     private Rover rover;
