@@ -4,9 +4,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MatrixUtil {
+    private final int MATRIX_SIZE = 10;
 
     public int getMatrixSize() {
-        int matrixSize = 5;
-        return matrixSize;
+        return MATRIX_SIZE;
     }
 }
+
