@@ -23,20 +23,83 @@ public class RoverService {
         int i = 0;
         while (i < sequence.length()) {
             Character caracter = Character.toUpperCase(sequence.charAt(i));
-            if (caracter != 'M' && Character.toUpperCase(caracter) != 'R' && caracter != 'L') {
+            if (caracter != 'M' && caracter != 'R' && caracter != 'L') {
                 throw new IllegalArgumentException("La orden " + caracter + " no existe.");
             }
 
             if (caracter != 'M') {
+                changeDirection(caracter);
+            }else {
                 if (isInTheLimit()) {
-
+                    changeOppositeDir(map.getRover().getDirection());
                 }
-                moveIfNotObstacleInFront();
+                
             }
 
             i++;
         }
 
+    }
+
+    private void changeOppositeDir(Directions direction) {
+        switch (direction) {
+            case NORTH:
+                map.getRover().setDirection(Directions.SOUTH);
+                break;
+            case SOUTH:
+                map.getRover().setDirection(Directions.NORTH);
+                break;
+            case EAST:
+                map.getRover().setDirection(Directions.WEST);
+                break;
+            case WEST:
+                map.getRover().setDirection(Directions.EAST);
+                break;
+            default:
+                System.out.println("Paso algo.");
+        }
+    }
+
+    private void changeDirection(char caracter) {
+        Directions actualDirection = map.getRover().getDirection();
+
+        if (caracter == 'L') {
+            switch (actualDirection) {
+                case NORTH:
+                    map.getRover().setDirection(Directions.WEST);
+                    break;
+                case SOUTH:
+                    map.getRover().setDirection(Directions.EAST);
+                    break;
+                case EAST:
+                    map.getRover().setDirection(Directions.NORTH);
+                    break;
+                case WEST:
+                    map.getRover().setDirection(Directions.SOUTH);
+                    break;
+                default:
+                    System.out.println("Error en el switch.");
+            }
+        }
+
+        if (caracter == 'R') {
+            switch (actualDirection) {
+                case NORTH:
+                    map.getRover().setDirection(Directions.EAST);
+                    break;
+                case SOUTH:
+                    map.getRover().setDirection(Directions.WEST);
+                    break;
+                case EAST:
+                    map.getRover().setDirection(Directions.SOUTH);
+                    break;
+                case WEST:
+                    map.getRover().setDirection(Directions.NORTH);
+                    break;
+                default:
+                    System.out.println("Error en el switch.");
+            }
+        }
     }
 
     private boolean isInTheLimit() {
