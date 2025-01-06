@@ -22,12 +22,12 @@ public class RoverService {
     public Output moveRover(String sequence) {
         int i = 0;
         while (i < sequence.length()) {
-            Character caracter = sequence.charAt(i);
-            if (Character.toUpperCase(caracter) != 'M' && Character.toUpperCase(caracter) != 'R' && Character.toUpperCase(caracter) != 'L') {
+            Character caracter = Character.toUpperCase(sequence.charAt(i));
+            if (caracter != 'M' && Character.toUpperCase(caracter) != 'R' && caracter != 'L') {
                 throw new IllegalArgumentException("La orden " + caracter + " no existe.");
             }
 
-            if (Character.toUpperCase(caracter) != 'M') {
+            if (caracter != 'M') {
                 if (isInTheLimit()) {
 
                 }
