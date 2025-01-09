@@ -32,6 +32,13 @@ public class RoverService {
             }else {
                 if (isInTheLimit()) {
                     changeOppositeDir(map.getRover().getDirection());
+                    Output output = Output.builder()
+                            .coordinates(map.getRover().getCoordinates())
+                            .direction(map.getRover().getDirection())
+                            .exit(true)
+                            .build();
+                }else {
+
                 }
                 
             }
@@ -116,23 +123,5 @@ public class RoverService {
 
         return false;
     }
-
-    private void moveIfNotObstacleInFront() {
-
-        if (direction ==  Directions.NORTH && map.getGrid().isOccupied(coordinates.getX(), coordinates.getY() + 1)) {
-            System.out.println("Hay un obstaculo al norte");
-            return true;
-        } else if (direction ==  Directions.SOUTH && map.getGrid().isOccupied(coordinates.getX(), coordinates.getY() - 1)) {
-            System.out.println("Hay un obstaculo al sur");
-            return true;
-        } else if (direction ==  Directions.EAST && map.getGrid().isOccupied(coordinates.getX() + 1, coordinates.getY())) {
-            System.out.println("Hay un obstaculo al este");
-            return true;
-        } else if (direction ==  Directions.WEST && map.getGrid().isOccupied(coordinates.getX() - 1, coordinates.getY())) {
-            System.out.println("Hay un obstaculo al oeste");
-            return true;
-        }
-
-        return false;
-    }
+    
 }
