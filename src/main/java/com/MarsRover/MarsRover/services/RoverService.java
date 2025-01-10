@@ -30,15 +30,24 @@ public class RoverService {
             if (caracter != 'M') {
                 changeDirection(caracter);
             }else {
+                Output output;
                 if (isInTheLimit()) {
                     changeOppositeDir(map.getRover().getDirection());
-                    Output output = Output.builder()
+                    output = Output.builder()
                             .coordinates(map.getRover().getCoordinates())
                             .direction(map.getRover().getDirection())
                             .exit(true)
                             .build();
+                    return output;
                 }else {
-
+                    if (obstacleInFront()) {
+                        output = Output.builder()
+                                .coordinates(map.getRover().getCoordinates())
+                                .direction(map.getRover().getDirection())
+                                .exit(true)
+                                .build();
+                        return output;
+                    }
                 }
                 
             }
@@ -123,5 +132,8 @@ public class RoverService {
 
         return false;
     }
-    
+
+    private boolean obstacleInFront() {
+        return true;
+    }
 }
