@@ -1,9 +1,11 @@
 package com.MarsRover.MarsRover.services;
 
 import com.MarsRover.MarsRover.controllers.Output;
+import com.MarsRover.MarsRover.models.map.Grid;
 import com.MarsRover.MarsRover.models.map.Map;
 import com.MarsRover.MarsRover.models.rover.Coordinates;
 import com.MarsRover.MarsRover.models.rover.Directions;
+import com.MarsRover.MarsRover.models.rover.Rover;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +49,8 @@ public class RoverService {
                                 .exit(true)
                                 .build();
                         return output;
+                    }else {
+                        move();
                     }
                 }
                 
@@ -134,6 +138,57 @@ public class RoverService {
     }
 
     private boolean obstacleInFront() {
-        return true;
+        Directions dir = map.getRover().getDirection();
+        Grid grid = map.getGrid();
+        int x = coordinates.getX();
+        int y = coordinates.getY();
+
+        return switch (dir) {
+            case NORTH -> grid.isOccupied(x, y + 1);
+            case SOUTH -> grid.isOccupied(x, y - 1);
+            case EAST -> grid.isOccupied(x + 1, y);
+            case WEST -> grid.isOccupied(x - 1, y);
+            default -> {
+                System.out.println("Error en obstacleInFront()");
+                yield true;
+            }
+        };
+    }
+
+    public void move() {
+        int x = coordinates.getX();
+        int y = coordinates.getY();
+
+        Coordinates newCoordinates = new Coordinates();
+        Rover newRover = new Rover();
+
+        switch (direction) {
+            case NORTH:
+                newCoordinates.setX(x);
+                newCoordinates.setY(y+1);
+                newRover.setDirection(direction);
+                newRover.setCoordinates(newCoordinates);
+                map.setRover(newRover);
+            case SOUTH:
+                newCoordinates.setX(x);
+                newCoordinates.setY(y-1);
+                newRover.setDirection(direction);
+                newRover.setCoordinates(newCoordinates);
+                map.setRover(newRover);
+            case EAST:
+                newCoordinates.setX(x+1);
+                newCoordinates.setY(y);
+                newRover.setDirection(direction);
+                newRover.setCoordinates(newCoordinates);
+                map.setRover(newRover);
+            case WEST:
+                newCoordinates.setX(x);
+                newCoordinates.setY(y-1);
+                newRover.setDirection(direction);
+                newRover.setCoordinates(newCoordinates);
+                map.setRover(newRover);
+            default:
+                System.out.println("Error en el switch.");
+        }
     }
 }
