@@ -38,10 +38,10 @@ public class RoverService {
                     output = Output.builder()
                             .coordinates(map.getRover().getCoordinates())
                             .direction(map.getRover().getDirection())
-                            .exit(true)
+                            .exit(true)//La secuencia de ordenes dejo de ejecutarse por un obstaculo
                             .build();
                     return output;
-                }else {
+                }else { //
                     if (obstacleInFront()) {
                         output = Output.builder()
                                 .coordinates(map.getRover().getCoordinates())
@@ -51,6 +51,14 @@ public class RoverService {
                         return output;
                     }else {
                         move();
+                        if (i == sequence.length()-1) {
+                            output = Output.builder()
+                                    .coordinates(map.getRover().getCoordinates())
+                                    .direction(map.getRover().getDirection())
+                                    .exit(false)
+                                    .build();
+                            return output;
+                        }
                     }
                 }
                 
@@ -58,7 +66,7 @@ public class RoverService {
 
             i++;
         }
-
+        return null;
     }
 
     private void changeOppositeDir(Directions direction) {
@@ -188,7 +196,7 @@ public class RoverService {
                 newRover.setCoordinates(newCoordinates);
                 map.setRover(newRover);
             default:
-                System.out.println("Error en el switch.");
+                System.out.println("Error en el switch (move).");
         }
     }
 }
