@@ -6,10 +6,12 @@ import com.MarsRover.MarsRover.models.rover.Coordinates;
 import com.MarsRover.MarsRover.models.rover.Directions;
 import com.MarsRover.MarsRover.models.rover.Rover;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Data
+@Component
 public class Map {
     private Grid grid;
     private Rover rover;

@@ -12,10 +12,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoverService {
     @Autowired
-    Map map;
+    private Map map;
 
-    Directions direction = map.getRover().getDirection();
-    Coordinates coordinates = map.getRover().getCoordinates();
+    Directions direction;
+    Coordinates coordinates;
+
+    public RoverService() {
+        direction = map.getRover().getDirection();
+        coordinates = map.getRover().getCoordinates();
+    }
 
     public Coordinates getRoverPosition() {
         return map.getRover().getCoordinates();
@@ -67,6 +72,7 @@ public class RoverService {
             i++;
         }
         return null;
+
     }
 
     private void changeOppositeDir(Directions direction) {
@@ -131,7 +137,6 @@ public class RoverService {
     }
 
     private boolean isInTheLimit() {
-
         if (direction == Directions.NORTH && coordinates.getY() == 9) {
             return true;
         } else if (direction == Directions.SOUTH && coordinates.getY() == 0) {
@@ -177,24 +182,28 @@ public class RoverService {
                 newRover.setDirection(direction);
                 newRover.setCoordinates(newCoordinates);
                 map.setRover(newRover);
+                break;
             case SOUTH:
                 newCoordinates.setX(x);
                 newCoordinates.setY(y-1);
                 newRover.setDirection(direction);
                 newRover.setCoordinates(newCoordinates);
                 map.setRover(newRover);
+                break;
             case EAST:
                 newCoordinates.setX(x+1);
                 newCoordinates.setY(y);
                 newRover.setDirection(direction);
                 newRover.setCoordinates(newCoordinates);
                 map.setRover(newRover);
+                break;
             case WEST:
                 newCoordinates.setX(x);
                 newCoordinates.setY(y-1);
                 newRover.setDirection(direction);
                 newRover.setCoordinates(newCoordinates);
                 map.setRover(newRover);
+                break;
             default:
                 System.out.println("Error en el switch (move).");
         }
