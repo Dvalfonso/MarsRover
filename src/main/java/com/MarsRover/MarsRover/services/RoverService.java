@@ -2,7 +2,7 @@ package com.MarsRover.MarsRover.services;
 
 import com.MarsRover.MarsRover.controllers.Output;
 import com.MarsRover.MarsRover.models.map.Grid;
-import com.MarsRover.MarsRover.models.map.Map;
+import com.MarsRover.MarsRover.models.map.MapRover;
 import com.MarsRover.MarsRover.models.rover.Coordinates;
 import com.MarsRover.MarsRover.models.rover.Directions;
 import com.MarsRover.MarsRover.models.rover.Rover;
@@ -11,19 +11,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RoverService {
+
+    private final MapRover mapRover;
+    private Directions direction;
+    private Coordinates coordinates;
+
     @Autowired
-    private Map map;
-
-    Directions direction;
-    Coordinates coordinates;
-
-    public RoverService() {
-        direction = map.getRover().getDirection();
-        coordinates = map.getRover().getCoordinates();
+    public RoverService(MapRover mapRover) {
+        this.mapRover = mapRover;
+        direction = mapRover.getRover().getDirection();
+        coordinates = mapRover.getRover().getCoordinates();
     }
 
     public Coordinates getRoverPosition() {
-        return map.getRover().getCoordinates();
+        return mapRover.getRover().getCoordinates();
     }
 
     public Output moveRover(String sequence) {
@@ -39,18 +40,18 @@ public class RoverService {
             }else {
                 Output output;
                 if (isInTheLimit()) {
-                    changeOppositeDir(map.getRover().getDirection());
+                    changeOppositeDir(mapRover.getRover().getDirection());
                     output = Output.builder()
-                            .coordinates(map.getRover().getCoordinates())
-                            .direction(map.getRover().getDirection())
+                            .coordinates(mapRover.getRover().getCoordinates())
+                            .direction(mapRover.getRover().getDirection())
                             .exit(true)//La secuencia de ordenes dejo de ejecutarse por un obstaculo
                             .build();
                     return output;
                 }else { //
                     if (obstacleInFront()) {
                         output = Output.builder()
-                                .coordinates(map.getRover().getCoordinates())
-                                .direction(map.getRover().getDirection())
+                                .coordinates(mapRover.getRover().getCoordinates())
+                                .direction(mapRover.getRover().getDirection())
                                 .exit(true)
                                 .build();
                         return output;
@@ -58,8 +59,8 @@ public class RoverService {
                         move();
                         if (i == sequence.length()-1) {
                             output = Output.builder()
-                                    .coordinates(map.getRover().getCoordinates())
-                                    .direction(map.getRover().getDirection())
+                                    .coordinates(mapRover.getRover().getCoordinates())
+                                    .direction(mapRover.getRover().getDirection())
                                     .exit(false)
                                     .build();
                             return output;
@@ -78,16 +79,16 @@ public class RoverService {
     private void changeOppositeDir(Directions direction) {
         switch (direction) {
             case NORTH:
-                map.getRover().setDirection(Directions.SOUTH);
+                mapRover.getRover().setDirection(Directions.SOUTH);
                 break;
             case SOUTH:
-                map.getRover().setDirection(Directions.NORTH);
+                mapRover.getRover().setDirection(Directions.NORTH);
                 break;
             case EAST:
-                map.getRover().setDirection(Directions.WEST);
+                mapRover.getRover().setDirection(Directions.WEST);
                 break;
             case WEST:
-                map.getRover().setDirection(Directions.EAST);
+                mapRover.getRover().setDirection(Directions.EAST);
                 break;
             default:
                 System.out.println("Paso algo.");
@@ -95,21 +96,21 @@ public class RoverService {
     }
 
     private void changeDirection(char caracter) {
-        Directions actualDirection = map.getRover().getDirection();
+        Directions actualDirection = mapRover.getRover().getDirection();
 
         if (caracter == 'L') {
             switch (actualDirection) {
                 case NORTH:
-                    map.getRover().setDirection(Directions.WEST);
+                    mapRover.getRover().setDirection(Directions.WEST);
                     break;
                 case SOUTH:
-                    map.getRover().setDirection(Directions.EAST);
+                    mapRover.getRover().setDirection(Directions.EAST);
                     break;
                 case EAST:
-                    map.getRover().setDirection(Directions.NORTH);
+                    mapRover.getRover().setDirection(Directions.NORTH);
                     break;
                 case WEST:
-                    map.getRover().setDirection(Directions.SOUTH);
+                    mapRover.getRover().setDirection(Directions.SOUTH);
                     break;
                 default:
                     System.out.println("Error en el switch.");
@@ -119,16 +120,16 @@ public class RoverService {
         if (caracter == 'R') {
             switch (actualDirection) {
                 case NORTH:
-                    map.getRover().setDirection(Directions.EAST);
+                    mapRover.getRover().setDirection(Directions.EAST);
                     break;
                 case SOUTH:
-                    map.getRover().setDirection(Directions.WEST);
+                    mapRover.getRover().setDirection(Directions.WEST);
                     break;
                 case EAST:
-                    map.getRover().setDirection(Directions.SOUTH);
+                    mapRover.getRover().setDirection(Directions.SOUTH);
                     break;
                 case WEST:
-                    map.getRover().setDirection(Directions.NORTH);
+                    mapRover.getRover().setDirection(Directions.NORTH);
                     break;
                 default:
                     System.out.println("Error en el switch.");
@@ -151,8 +152,8 @@ public class RoverService {
     }
 
     private boolean obstacleInFront() {
-        Directions dir = map.getRover().getDirection();
-        Grid grid = map.getGrid();
+        Directions dir = mapRover.getRover().getDirection();
+        Grid grid = mapRover.getGrid();
         int x = coordinates.getX();
         int y = coordinates.getY();
 
@@ -181,28 +182,28 @@ public class RoverService {
                 newCoordinates.setY(y+1);
                 newRover.setDirection(direction);
                 newRover.setCoordinates(newCoordinates);
-                map.setRover(newRover);
+                mapRover.setRover(newRover);
                 break;
             case SOUTH:
                 newCoordinates.setX(x);
                 newCoordinates.setY(y-1);
                 newRover.setDirection(direction);
                 newRover.setCoordinates(newCoordinates);
-                map.setRover(newRover);
+                mapRover.setRover(newRover);
                 break;
             case EAST:
                 newCoordinates.setX(x+1);
                 newCoordinates.setY(y);
                 newRover.setDirection(direction);
                 newRover.setCoordinates(newCoordinates);
-                map.setRover(newRover);
+                mapRover.setRover(newRover);
                 break;
             case WEST:
                 newCoordinates.setX(x);
                 newCoordinates.setY(y-1);
                 newRover.setDirection(direction);
                 newRover.setCoordinates(newCoordinates);
-                map.setRover(newRover);
+                mapRover.setRover(newRover);
                 break;
             default:
                 System.out.println("Error en el switch (move).");
