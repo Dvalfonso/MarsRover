@@ -15,6 +15,7 @@ public class Rover {
     private Directions direction;
 
     public Rover() {
+        this.coordinates = new Coordinates();
         coordinates.setY(0);
         coordinates.setX(0);
         direction = Directions.NORTH;
